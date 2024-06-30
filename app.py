@@ -1,9 +1,9 @@
 import streamlit as st
-import joblib
 import numpy as np
+import pickle
+import joblib
 
-# Load the trained model
-model = joblib.load('credit_scoring_model.pkl')
+model = joblib.load("credit_scoring_using_gradient_boosting.pkl")
 
 # Streamlit app
 st.set_page_config(page_title='Credit Worthiness')
