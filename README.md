@@ -1,0 +1,1 @@
+# Credit Scoring Model - Assess creditworthiness of Loan Applicants
