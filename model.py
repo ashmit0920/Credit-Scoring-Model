@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import joblib
 
 # Generate synthetic dataset
 np.random.seed(42)
@@ -46,7 +47,7 @@ print(conf_matrix)
 print("Classification Report:")
 print(class_report)
 
-"""## Feature Importance"""
+# Feature Importance
 
 feature_importances = model.feature_importances_
 features = X.columns
@@ -63,3 +64,7 @@ plt.xlabel('Feature Importance')
 plt.title('Feature Importance in Credit Scoring Model')
 plt.gca().invert_yaxis()
 plt.show()
+
+
+# Save the model
+joblib.dump(model, 'credit_scoring_model.pkl')
