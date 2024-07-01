@@ -27,10 +27,14 @@ X[['age', 'Cdur', 'Camt', 'NumCred']] = scaler.fit_transform(X[['age', 'Cdur', '
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
+from imblearn.over_sampling import SMOTE
+smote = SMOTE(random_state=42)
+X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+
 # Train a Gradient Boosting Classifier
 from sklearn.ensemble import GradientBoostingClassifier
 model = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
-model.fit(X_train, y_train)
+model.fit(X_train_resampled, y_train_resampled)
 
 # Evaluate the model
 from sklearn.metrics import roc_auc_score, classification_report
