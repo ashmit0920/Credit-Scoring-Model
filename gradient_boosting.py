@@ -4,7 +4,7 @@ from sklearn.preprocessing import LabelEncoder
 
 data = pd.read_csv("./dataset2/CreditWorthiness.csv")
 
-features = ['age', 'Cdur', 'Camt', 'NumCred', 'Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'MSG', 'Oparties', 'JobType', 'creditScore', 'Rdur']
+features = ['age', 'Cdur', 'Camt', 'NumCred', 'Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'InRate', 'MSG', 'Oparties', 'JobType', 'creditScore', 'Rdur']
 data = data[features]
 
 # Convert categorical features to numeric
@@ -21,7 +21,7 @@ y = label_encoder.fit_transform(y) # good -> 1, bad -> 0
 # Standardize numerical features
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
-X[['age', 'Cdur', 'Camt', 'NumCred']] = scaler.fit_transform(X[['age', 'Cdur', 'Camt', 'NumCred']])
+X[['age', 'Cdur', 'Camt', 'NumCred', 'InRate']] = scaler.fit_transform(X[['age', 'Cdur', 'Camt', 'NumCred', 'InRate']])
 
 # Resampling data as good:bad is 700:300
 from imblearn.over_sampling import SMOTE
