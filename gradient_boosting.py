@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
+import joblib 
 
 data = pd.read_csv("./dataset2/CreditWorthiness.csv")
 
@@ -67,3 +68,5 @@ print(f"ROC-AUC Score on Test Data: {roc_auc}")
 class_report = classification_report(y_test, y_pred)
 print("Classification Report:")
 print(class_report)
+
+joblib.dump(X_train.columns.tolist(), "feature_sequence.pkl")

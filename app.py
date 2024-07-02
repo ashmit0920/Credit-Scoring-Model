@@ -5,6 +5,7 @@ import joblib
 import pandas as pd
 
 model = joblib.load("credit_scoring.pkl")
+feature_sequence = joblib.load("feature_sequence.pkl")
 
 # Streamlit app
 st.set_page_config(page_title='Credit Worthiness')
@@ -51,7 +52,7 @@ for col in features:
         user_inputs[col] = st.selectbox(f'Select {feature_names[col]}', options=unique_values)
 
     else:
-        # Handle numerical columns with text input
+        # numerical columns with number input
         if col in ['NumCred', 'InRate']:
             user_inputs[col] = st.number_input(f'Enter {feature_names[col]}', min_value=1, max_value=4, value=1)
         else:
@@ -64,11 +65,13 @@ user_data = pd.DataFrame([user_inputs])
 user_data = pd.get_dummies(user_data, columns=categorical)
 
 # Ensuring columns match the model's expectations
-missing_cols = set(features) - set(user_data.columns)
+missing_cols = set(feature_sequence) - set(user_data.columns)
 for col in missing_cols:
     user_data[col] = 0  # Set missing dummy columns to 0 if not provided by the user
 
-# Predict button
+# Reordering the columns to match the order used during model training
+user_data = user_data[feature_sequence]
+
 if st.button('Predict Creditworthiness'):
     prediction = model.predict(user_data)
     
