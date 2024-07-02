@@ -2,13 +2,43 @@ import streamlit as st
 import numpy as np
 import joblib
 import pandas as pd
+import altair as alt
+import time
 
 model = joblib.load("./exports/credit_scoring.pkl")
 feature_sequence = joblib.load("./exports/feature_sequence.pkl")
 
-# Streamlit app
 st.set_page_config(page_title='Credit Worthiness')
-st.title('Credit Scoring Application')
+
+tab1, tab2, tab3 = st.tabs(["Home", "Predict", "About"])
+
+# Streamlit app
+with tab1:
+    st.title(':green[Credit Scoring] Application')
+    st.subheader("Assess creditworthiness of Loan applicants")
+    st.write("Below are some :blue[visualizations] and :blue[data insights] based on the data that was used to train this model. To predict whether an applicant is creditworthy or not, head to the 'Predict' tab from the menu above.")
+
+    data = pd.read_csv("./dataset2/CreditWorthiness.csv")
+
+    credit_score_counts = data['creditScore'].value_counts().reset_index()
+    credit_score_counts.columns = ['creditScore', 'Count']
+    chart = alt.Chart(credit_score_counts).mark_bar().encode(
+        x='creditScore',
+        y='Count'
+    ).properties(
+        width=400,
+    )
+    st.markdown("#### Credit Score Distribution")
+    st.altair_chart(chart)
+
+    age_counts = data['age'].value_counts().reset_index()
+    age_counts.columns = ['age', 'Count']
+    age_chart = alt.Chart(age_counts).mark_line().encode(
+        x='age',
+        y='Count'
+    )
+    st.markdown("#### Age Distribution")
+    st.altair_chart(age_chart)
 
 # Input features
 features = ['age', 'Cdur', 'Camt', 'NumCred', 'Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'InRate', 'MSG', 'Oparties', 'JobType', 'Rdur']
@@ -37,44 +67,57 @@ feature_names = {
     'Rdur': 'Residence duration',
     'JobType': 'Job type',
     'age': 'Age',
-    'Cdur': 'Credit duration',
+    'Cdur': 'Credit duration (in months)',
     'Camt': 'Loan amount',
     'InRate': 'Installment Rate',
     'NumCred': 'Number of existing credits',
 }
 
 # Displaying input options for categorical columns
-user_inputs = {}
-for col in features:
-    if col in categorical:
-        unique_values = input_options[col]
-        user_inputs[col] = st.selectbox(f'Select {feature_names[col]}', options=unique_values)
+with tab2:
+    st.title(':green[Credit Scoring] Application')
+    st.subheader("Assess creditworthiness of Loan applicants")
+    st.write(f":orange[Note:] The predictions are made by a model trained on a small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction.")
 
-    else:
-        # numerical columns with number input
-        if col in ['NumCred', 'InRate']:
-            user_inputs[col] = st.number_input(f'Enter {feature_names[col]}', min_value=1, max_value=4, value=1)
+    user_inputs = {}
+    for col in features:
+        if col in categorical:
+            unique_values = input_options[col]
+            user_inputs[col] = st.selectbox(f'Select {feature_names[col]}', options=unique_values)
+
         else:
-            user_inputs[col] = st.number_input(f'Enter {feature_names[col]}')
+            # numerical columns with number input
+            if col in ['NumCred', 'InRate']:
+                user_inputs[col] = st.number_input(f'Enter {feature_names[col]}', min_value=1, max_value=4, value=1)
+            else:
+                user_inputs[col] = st.number_input(f'Enter {feature_names[col]}')
 
-# Preparing input data for prediction
-user_data = pd.DataFrame([user_inputs])
+    # Preparing input data for prediction
+    user_data = pd.DataFrame([user_inputs])
 
-# Handling categorical columns with pd.get_dummies
-user_data = pd.get_dummies(user_data, columns=categorical)
+    # Handling categorical columns with pd.get_dummies
+    user_data = pd.get_dummies(user_data, columns=categorical)
 
-# Ensuring columns match the model's expectations
-missing_cols = set(feature_sequence) - set(user_data.columns)
-for col in missing_cols:
-    user_data[col] = 0  # Set missing dummy columns to 0 if not provided by the user
+    # Ensuring columns match the model's expectations
+    missing_cols = set(feature_sequence) - set(user_data.columns)
+    for col in missing_cols:
+        user_data[col] = 0  # Set missing dummy columns to 0 if not provided by the user
 
-# Reordering the columns to match the order used during model training
-user_data = user_data[feature_sequence]
+    # Reordering the columns to match the order used during model training
+    user_data = user_data[feature_sequence]
 
-if st.button('Predict Creditworthiness'):
-    prediction = model.predict(user_data)
-    
-    if prediction == 1:
-        st.success('The applicant is predicted to be creditworthy.')
-    else:
-        st.error('The applicant is predicted to default on the loan.')
+    if st.button('Predict Creditworthiness'):
+        prediction = model.predict(user_data)
+        
+        with st.spinner("Predicting..."):
+            time.sleep(2)
+            if prediction == 1:
+                st.success('The applicant is predicted to be creditworthy.')
+            else:
+                st.error('The applicant is predicted to default on the loan.')
+
+with tab3:
+    st.title(':green[Credit Scoring] Application')
+    st.subheader("Assess creditworthiness of Loan applicants")
+    st.write("Welcome to the Credit Scoring App! This application leverages machine learning to predict the creditworthiness of loan applicants. By analyzing 14 factors such as age, income, loan amount, employment status, credit history etc., the app utilizes a :orange[Hyperparameter-tuned Gradient Boosting Classifier] to provide accurate credit scores. The aim is to help financial institutions and loan officers make informed decisions quickly and efficiently. This tool showcases the power of predictive modeling in the finance sector, offering insights and transparency into the credit evaluation process. I hope you find this app useful and insightful :)")
+    st.write(f":green[Disclaimer:] The ML model is trained on a small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction. The dataset used for training was sourced from Kaggle, and can be found [here]('https://kaggle.com').")
