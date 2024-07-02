@@ -119,5 +119,29 @@ with tab2:
 with tab3:
     st.title(':green[Credit Scoring] Application')
     st.subheader("Assess creditworthiness of Loan applicants")
-    st.write("Welcome to the Credit Scoring App! This application leverages machine learning to predict the creditworthiness of loan applicants. By analyzing 14 factors such as age, income, loan amount, employment status, credit history etc., the app utilizes a :orange[Hyperparameter-tuned Gradient Boosting Classifier] to provide accurate credit scores. The aim is to help financial institutions and loan officers make informed decisions quickly and efficiently. This tool showcases the power of predictive modeling in the finance sector, offering insights and transparency into the credit evaluation process. I hope you find this app useful and insightful :)")
-    st.write(f":green[Disclaimer:] The ML model is trained on a small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction. The dataset used for training was sourced from Kaggle, and can be found [here]('https://kaggle.com').")
+    st.markdown("Welcome to the Credit Scoring App! This application leverages machine learning to predict the creditworthiness of loan applicants. By analyzing 14 factors such as age, income, loan amount, employment status, credit history etc., the app utilizes a :blue[**Hyperparameter-tuned Gradient Boosting Classifier**] to provide accurate credit scores. The aim is to help financial institutions and loan officers make informed decisions quickly and efficiently. This tool showcases the power of predictive modeling in the finance sector, offering insights and transparency into the credit evaluation process. I hope you find this app useful and insightful :)")
+    st.markdown(f":green[**Disclaimer:**] The ML model is trained on a small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction. The dataset used for training was sourced from Kaggle, and can be found [here](https://www.kaggle.com/datasets/bbjadeja/predicting-creditworthiness).")
+
+    footer = """
+    <style>
+    footer {
+        visibility: hidden;
+    }
+    .main-footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #0e1117;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 12px;
+        border-top: 1px solid #e0e0e0
+    }
+    </style>
+    <div class="main-footer">
+        <p>Credit Scoring App © 2024 | Built by Ashmit 👨‍💻</p>
+    </div>
+    """
+    st.markdown(footer, unsafe_allow_html=True)
