@@ -1,11 +1,10 @@
 import streamlit as st
 import numpy as np
-import pickle
 import joblib
 import pandas as pd
 
-model = joblib.load("credit_scoring.pkl")
-feature_sequence = joblib.load("feature_sequence.pkl")
+model = joblib.load("./exports/credit_scoring.pkl")
+feature_sequence = joblib.load("./exports/feature_sequence.pkl")
 
 # Streamlit app
 st.set_page_config(page_title='Credit Worthiness')
