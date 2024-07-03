@@ -38,8 +38,48 @@ cdur_counts = data['Cdur'].value_counts().reset_index()
 cdur_counts.columns = ['Credit Duration', 'Count']
 cdur_chart = alt.Chart(cdur_counts).mark_bar().encode(
     x = alt.X('Credit Duration', bin = alt.BinParams(maxbins=20)),
-    y='Count'
+    y = 'Count'
 )
+
+cpur_counts = data['Cpur'].value_counts().reset_index()
+cpur_counts.columns = ['Credit Purpose', 'Count']
+cpur_chart = alt.Chart(cpur_counts).mark_bar().encode(
+    x = 'Credit Purpose',
+    y = 'Count'
+)
+
+jobtype_counts = data['JobType'].value_counts().reset_index()
+jobtype_counts.columns = ['Job Type', 'Count']
+jobtype_chart = alt.Chart(jobtype_counts).mark_bar().encode(
+    x = 'Job Type',
+    y = 'Count'
+)
+
+footer = """
+    <style>
+    footer {
+        visibility: hidden;
+    }
+    .main-footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #0e1117;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 12px;
+        border-top: 1px solid #e0e0e0
+    }
+    a {
+        text-decoration: None;
+    }
+    </style>
+    <div class="main-footer">
+        <p>Credit Scoring App © 2024 | Built by Ashmit 👨‍💻 | For more projects, check out my <a href="https://github.com/ashmit0920">GitHub</a></p>
+    </div>
+"""
 
 st.set_page_config(page_title='Credit Worthiness')
 
@@ -68,7 +108,17 @@ with tab1:
     with col4:
         st.markdown("#### Credit Duration Distribution")
         st.altair_chart(cdur_chart, use_container_width=True)
+    
+    col5, col6 = st.columns(2)
+    with col5:
+        st.markdown("#### Credit Purpose Distribution")
+        st.altair_chart(cpur_chart, use_container_width=True)
+    
+    with col6:
+        st.markdown("#### Job Type Distribution")
+        st.altair_chart(jobtype_chart, use_container_width=True)
 
+    st.markdown(footer, unsafe_allow_html=True)
 # Input features
 features = ['age', 'Cdur', 'Camt', 'NumCred', 'Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'InRate', 'MSG', 'Oparties', 'JobType', 'Rdur']
 categorical = ['Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'MSG', 'Oparties', 'JobType', 'Rdur']
@@ -106,7 +156,7 @@ feature_names = {
 with tab2:
     st.title(':green[Credit Scoring] Application')
     st.subheader("Assess creditworthiness of Loan applicants")
-    st.write(f":orange[Note:] The predictions are made by a model trained on a small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction.")
+    st.write(f":orange[Note:] The predictions are made by a model trained on a relatively small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction.")
 
     user_inputs = {}
     for col in features:
@@ -149,28 +199,7 @@ with tab3:
     st.title(':green[Credit Scoring] Application')
     st.subheader("Assess creditworthiness of Loan applicants")
     st.markdown("Welcome to the Credit Scoring App! This application leverages machine learning to predict the creditworthiness of loan applicants. By analyzing 14 factors such as age, income, loan amount, employment status, credit history etc., the app utilizes a :blue[**Hyperparameter-tuned Gradient Boosting Classifier**] to provide accurate credit scores. The aim is to help financial institutions and loan officers make informed decisions quickly and efficiently. This tool showcases the power of predictive modeling in the finance sector, offering insights and transparency into the credit evaluation process. I hope you find this app useful and insightful :)")
-    st.markdown(f":green[**Disclaimer:**] The ML model is trained on a small dataset, which means it can not guarantee a 100% legit and real-world accurate prediction. The dataset used for training was sourced from Kaggle, and can be found [here](https://www.kaggle.com/datasets/bbjadeja/predicting-creditworthiness).")
+    st.markdown("#### :green[Disclaimer]")
+    st.markdown(f"The ML model is trained on a relatively small dataset and is intended for demonstration purposes only, which means it can not guarantee a 100% legit and real-world accurate prediction. The developer does not assume any responsibility for the accuracy or reliability of predictions made using this app in real-world scenarios. Use at your own risk. The dataset used for training was sourced from Kaggle, and can be found [here](https://www.kaggle.com/datasets/bbjadeja/predicting-creditworthiness).")
 
-    footer = """
-    <style>
-    footer {
-        visibility: hidden;
-    }
-    .main-footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: #0e1117;
-        color: white;
-        text-align: center;
-        padding: 10px;
-        font-size: 12px;
-        border-top: 1px solid #e0e0e0
-    }
-    </style>
-    <div class="main-footer">
-        <p>Credit Scoring App © 2024 | Built by Ashmit 👨‍💻</p>
-    </div>
-    """
     st.markdown(footer, unsafe_allow_html=True)
