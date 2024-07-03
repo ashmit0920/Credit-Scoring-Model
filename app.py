@@ -8,6 +8,39 @@ import time
 model = joblib.load("./exports/credit_scoring.pkl")
 feature_sequence = joblib.load("./exports/feature_sequence.pkl")
 
+data = pd.read_csv("./dataset2/CreditWorthiness.csv")
+
+# Charts for Home tab
+credit_score_counts = data['creditScore'].value_counts().reset_index()
+credit_score_counts.columns = ['creditScore', 'Count']
+cred_chart = alt.Chart(credit_score_counts).mark_bar().encode(
+    x='creditScore',
+    y='Count'
+).properties(
+    width=400,
+)
+
+age_counts = data['age'].value_counts().reset_index()
+age_counts.columns = ['age', 'Count']
+age_chart = alt.Chart(age_counts).mark_line().encode(
+    x='age',
+    y='Count'
+)
+
+camt_counts = data['Camt'].value_counts().reset_index()
+camt_counts.columns = ['Credit Amount', 'Count']
+camt_chart = alt.Chart(camt_counts).mark_bar().encode(
+    x = alt.X('Credit Amount', bin = alt.BinParams(maxbins=30)),
+    y='Count'
+)
+
+cdur_counts = data['Cdur'].value_counts().reset_index()
+cdur_counts.columns = ['Credit Duration', 'Count']
+cdur_chart = alt.Chart(cdur_counts).mark_bar().encode(
+    x = alt.X('Credit Duration', bin = alt.BinParams(maxbins=20)),
+    y='Count'
+)
+
 st.set_page_config(page_title='Credit Worthiness')
 
 tab1, tab2, tab3 = st.tabs(["Home", "Predict", "About"])
@@ -18,27 +51,23 @@ with tab1:
     st.subheader("Assess creditworthiness of Loan applicants")
     st.write("Below are some :blue[visualizations] and :blue[data insights] based on the data that was used to train this model. To predict whether an applicant is creditworthy or not, head to the 'Predict' tab from the menu above.")
 
-    data = pd.read_csv("./dataset2/CreditWorthiness.csv")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.markdown("#### Credit Score Distribution")
+        st.altair_chart(cred_chart, use_container_width=True)
 
-    credit_score_counts = data['creditScore'].value_counts().reset_index()
-    credit_score_counts.columns = ['creditScore', 'Count']
-    chart = alt.Chart(credit_score_counts).mark_bar().encode(
-        x='creditScore',
-        y='Count'
-    ).properties(
-        width=400,
-    )
-    st.markdown("#### Credit Score Distribution")
-    st.altair_chart(chart)
+    with col2:
+        st.markdown("#### Age Distribution")
+        st.altair_chart(age_chart, use_container_width=True)
 
-    age_counts = data['age'].value_counts().reset_index()
-    age_counts.columns = ['age', 'Count']
-    age_chart = alt.Chart(age_counts).mark_line().encode(
-        x='age',
-        y='Count'
-    )
-    st.markdown("#### Age Distribution")
-    st.altair_chart(age_chart)
+    col3, col4 = st.columns(2)
+    with col3:
+        st.markdown("#### Credit Amount Distribution")
+        st.altair_chart(camt_chart, use_container_width=True)
+
+    with col4:
+        st.markdown("#### Credit Duration Distribution")
+        st.altair_chart(cdur_chart, use_container_width=True)
 
 # Input features
 features = ['age', 'Cdur', 'Camt', 'NumCred', 'Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'InRate', 'MSG', 'Oparties', 'JobType', 'Rdur']
