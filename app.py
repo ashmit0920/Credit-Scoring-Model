@@ -199,7 +199,7 @@ with tab3:
     st.title(':green[Credit Scoring] Application')
     st.subheader("Assess creditworthiness of Loan applicants")
     st.markdown("Welcome to the Credit Scoring App! This application leverages machine learning to predict the creditworthiness of loan applicants. By analyzing 14 factors such as age, income, loan amount, employment status, credit history etc., the app utilizes a :blue[**Hyperparameter-tuned Gradient Boosting Classifier**] to provide accurate credit scores. The aim is to help financial institutions and loan officers make informed decisions quickly and efficiently. This tool showcases the power of predictive modeling in the finance sector, offering insights and transparency into the credit evaluation process. I hope you find this app useful and insightful :)")
-    st.markdown("#### :green[Disclaimer]")
+    st.markdown("#### :orange[Disclaimer]")
     st.markdown(f"The ML model is trained on a relatively small dataset and is intended for demonstration purposes only, which means it can not guarantee a 100% legit and real-world accurate prediction. The developer does not assume any responsibility for the accuracy or reliability of predictions made using this app in real-world scenarios. Use at your own risk. The dataset used for training was sourced from Kaggle, and can be found [here](https://www.kaggle.com/datasets/bbjadeja/predicting-creditworthiness).")
 
     st.markdown(footer, unsafe_allow_html=True)
