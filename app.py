@@ -77,7 +77,7 @@ footer = """
     }
     </style>
     <div class="main-footer">
-        <p>Credit Scoring App © 2024 | Built by Ashmit 👨‍💻 | For more projects, check out my <a href="https://github.com/ashmit0920">GitHub</a></p>
+        <p>Credit Scoring App © 2024 | Built by Ashmit and Anchit 👨‍💻 | For more projects, check out my <a href="https://github.com/ashmit0920">GitHub</a></p>
     </div>
 """
 
@@ -119,6 +119,7 @@ with tab1:
         st.altair_chart(jobtype_chart, use_container_width=True)
 
     st.markdown(footer, unsafe_allow_html=True)
+    
 # Input features
 features = ['age', 'Cdur', 'Camt', 'NumCred', 'Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'InRate', 'MSG', 'Oparties', 'JobType', 'Rdur']
 categorical = ['Cbal', 'Chist', 'Cpur', 'Sbal', 'Edur', 'MSG', 'Oparties', 'JobType', 'Rdur']
